@@ -36,7 +36,12 @@ jobs:
           mkdir -p dist
           os=$(echo ${{ matrix.os }} | sed 's/-latest//')
           nimv=${{ matrix.nim-version }}
-          tar czf dist/myapp-${tag}-nim${nimv}-${os}.tar.gz ./myapp
+
+          # 実際のバイナリ名を指定
+          bin_name="pawcite"
+
+          tar czf dist/${bin_name}-${tag}-nim${nimv}-${os}.tar.gz \
+              ./${bin_name}
 
       - name: Package release asset (Windows)
         if: runner.os == 'Windows'
@@ -45,10 +50,11 @@ jobs:
           $tag = '${{ github.ref_name }}'
           $nimv = '${{ matrix.nim-version }}'
           $os = 'windows'
+          $bin = 'pawcite.exe'
+
           New-Item -ItemType Directory -Path dist | Out-Null
-          Compress-Archive `
-            -Path .\myapp.exe `
-            -DestinationPath "dist\myapp-$tag-nim$nimv-$os.zip"
+          Compress-Archive -Path .\$bin -DestinationPath "dist\PowCite-$tag-nim$nimv-$os.zip"
+
 
 
       - name: Upload workflow artifact
