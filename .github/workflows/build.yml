@@ -2,6 +2,7 @@ name: Release Build (Multi‑Platform)
 
 # タグ push (v1.2.3 形式) または Release の公開時にトリガー
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*.*.*'
