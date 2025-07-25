@@ -28,22 +28,27 @@ jobs:
       - name: Build release binary
         run: nimble build -d:release
 
-      - name: Package release asset
+      - name: Package release asset (Unix)
+        if: runner.os != 'Windows'
         shell: bash
         run: |
           tag=${{ github.ref_name }}
           mkdir -p dist
-          # ここを自分のプロジェクト名に合わせる
-          bin_name="pawcite"
           os=$(echo ${{ matrix.os }} | sed 's/-latest//')
-          
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            zip -j dist/${bin_name}-${tag}-nim${{ matrix.nim-version }}-${os}.zip \
-                ./${bin_name}.exe
-          else
-            tar czf dist/${bin_name}-${tag}-nim${{ matrix.nim-version }}-${os}.tar.gz \
-                ./${bin_name}
-          fi
+          nimv=${{ matrix.nim-version }}
+          tar czf dist/myapp-${tag}-nim${nimv}-${os}.tar.gz ./myapp
+
+      - name: Package release asset (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $tag = '${{ github.ref_name }}'
+          $nimv = '${{ matrix.nim-version }}'
+          $os = 'windows'
+          New-Item -ItemType Directory -Path dist | Out-Null
+          Compress-Archive `
+            -Path .\myapp.exe `
+            -DestinationPath "dist\myapp-$tag-nim$nimv-$os.zip"
 
 
       - name: Upload workflow artifact
