@@ -51,7 +51,8 @@ jobs:
       - name: Setup Nim
         uses: jiro4989/setup-nim-action@v2
         with:
-          nim-version: ${{ matrix.nim-version }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          nim-version: '2.2.4'
 
       # 4. キャッシュ（Nimble）
       - name: Cache Nimble packages
