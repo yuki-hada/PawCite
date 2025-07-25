@@ -1,0 +1,48 @@
+name: Build & Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Nim environment
+        uses: jiro4989/setup-nim-action@v2.2.2
+        with:
+          nim-version: '2.2.4'
+
+      - name: Install dependencies
+        run: nimble install
+
+      - name: Build release binary
+        run: nimble build -d:release
+
+      - name: Package release asset
+        run: |
+          version=${{ github.ref_name }}
+          mkdir -p dist
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            # Windows は .exe
+            zip -j dist/myapp-${version}-windows.zip ./myapp.exe
+          else
+            # macOS/Ubuntu は tar.gz
+            osname=$(echo ${{ matrix.os }} | sed 's/-latest//')
+            tar czf dist/myapp-${version}-${osname}.tar.gz ./myapp
+          fi
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: myapp-${{ github.ref_name }}-${{ matrix.os }}
+          path: dist/
