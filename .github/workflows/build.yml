@@ -52,7 +52,7 @@ jobs:
         uses: jiro4989/setup-nim-action@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          nim-version: '2.2.4'
+          nim-version: '2.2.X'
 
       # 4. キャッシュ（Nimble）
       - name: Cache Nimble packages
