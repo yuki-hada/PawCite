@@ -22,12 +22,12 @@ proc format_crossref_citation*(doi: string): string =
         else:
             raise newException(ValueError, "No author in DOI data")
     let yearParts =
-    if msg.hasKey("published-online"):
-        msg["published-online"]["date-parts"][0]
-    elif msg.hasKey("published-print"):
-        msg["published-print"]["date-parts"][0]
-    else:
-        raise newException(ValueError, "No published date in dOI data")
+        if msg.hasKey("published-online"):
+            msg["published-online"]["date-parts"][0]
+        elif msg.hasKey("published-print"):
+            msg["published-print"]["date-parts"][0]
+        else:
+            raise newException(ValueError, "No published date in dOI data")
     
     let year = $yearParts[0]
     let given = firstAuthor["given"].getStr
@@ -35,12 +35,12 @@ proc format_crossref_citation*(doi: string): string =
     let etal    = if authors.len > 1: " et al." else: ""
 
     let containerTitle = 
-    if msg.hasKey("short-container-title"):
-        msg["short-container-title"][0]
-    elif msg.hasKey("container-title"):
-        msg["container-title"][0]
-    else:
-        raise newException(ValueError, "No container data in dOI data")
+        if msg.hasKey("short-container-title"):
+            msg["short-container-title"][0]
+        elif msg.hasKey("container-title"):
+            msg["container-title"][0]
+        else:
+            raise newException(ValueError, "No container data in dOI data")
 
     result = fmt"{firstAuthor["family"].getStr} {initial}{etal}, {containerTitle}. ({year})"
 
