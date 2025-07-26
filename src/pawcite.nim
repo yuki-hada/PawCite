@@ -45,11 +45,11 @@ proc format_crossref_citation*(doi: string): string =
     result = fmt"{firstAuthor["family"].getStr} {initial}{etal}, {containerTitle}. ({year})"
 
 when isMainModule:
-    var p = initOptParser()
-    while true:
-        p.next()
-        case p.kind
-        of cmdEnd: break
-        of cmdArgument:
-            echo format_crossref_citation(p.key)
-        else: discard
+    if paramCount() == 0:
+        echo "Usage: nimrun citation.nim <DOI> [<DOI> ...]"
+        quit(1)
+    for i in 1..paramCount():
+        try:
+            echo formatCrossrefCitation(paramStr(i))
+        except ValueError as e:
+            echo "Error for DOI ", paramStr(i), ": ", e.msg
