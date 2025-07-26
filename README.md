@@ -10,7 +10,7 @@
 ## Usase
 
 ```bash
- pawcite <DOI>
+ pawcite  <DOI> [<DOI> ...]
 ```
 
 
