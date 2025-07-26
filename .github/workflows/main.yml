@@ -53,7 +53,7 @@ jobs:
           $bin = 'pawcite.exe'
 
           New-Item -ItemType Directory -Path dist | Out-Null
-          Compress-Archive -Path .\$bin -DestinationPath "dist\PowCite-$tag-$os.zip"
+          Compress-Archive -Path .\$bin -DestinationPath "dist\PawCite-$tag-$os.zip"
 
 
 
