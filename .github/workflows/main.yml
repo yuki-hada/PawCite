@@ -26,7 +26,7 @@ jobs:
         run: nimble install
 
       - name: Build release binary
-        run: nimble build -d:release
+        run: nimble build -d:release -d:ssl
 
       - name: Package release asset (Unix)
         if: runner.os != 'Windows'
