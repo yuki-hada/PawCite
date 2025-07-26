@@ -2,7 +2,7 @@
 
 version       = "0.1.0"
 author        = "yuki"
-description   = "A new awesome nimble package"
+description   = "PawCite is a Nim‑based CLI tool that retrieves metadata from the Crossref API using a DOI and generates a concise citation string."
 license       = "GPL-3.0-or-later"
 srcDir        = "src"
 bin           = @["pawcite"]
