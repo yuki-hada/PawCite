@@ -7,8 +7,8 @@ proc fetchJson*(url: string): JsonNode =
     return parseJson(resp.body)
 
 proc format_crossref_citation*(doi: string): string =
-    let data    = fetchJson("https://api.crossref.org/works/" & doi)
-    let authors = data["message"]["author"]
+    let msg = fetchJson("https://api.crossref.org/works/" & doi)["message"]
+    let authors = msg.get("author", @[])
     var firstAuthor: JsonNode
 
     for author in authors:
@@ -16,13 +16,33 @@ proc format_crossref_citation*(doi: string): string =
             firstAuthor = author
             break
 
-    let etal = if authors.len > 1: " et al." else: ""
-    let yearStr = $data["message"]["published-online"]["date-parts"][0][0].getInt
-    result = firstAuthor["family"].getStr &
-                " " & toUpperAscii(firstAuthor["given"].getStr[0]) & "." &
-                etal & ", " &
-                data["message"]["short-container-title"][0].getStr & ". (" &
-                yearStr & ")"
+    if firstAuthor.len == 0:
+        if authors.len > 0:
+            firstAuthor = authors[0]
+        else:
+            raise newException(ValueError, "No author in DOI data")
+    let yearParts =
+    if msg.hasKey("published-online"):
+        msg["published-online"]["date-parts"][0]
+    elif msg.hasKey("published-print"):
+        msg["published-print"]["date-parts"][0]
+    else:
+        raise newException(ValueError, "No published date in dOI data")
+    
+    let year = $yearParts[0]
+    let given = firstAuthor["given"].getStr
+    let initial = if given.len > 0: $given[0].toUpper & "." else: ""
+    let etal    = if authors.len > 1: " et al." else: ""
+
+    let containerTitle = 
+    if msg.hasKey("short-container-title"):
+        msg["short-container-title"][0]
+    elif msg.hasKey("container-title"):
+        msg["container-title"][0]
+    else:
+        raise newException(ValueError, "No container data in dOI data")
+
+    result = fmt"{firstAuthor["family"].getStr} {initial}{etal}, {containerTitle}. ({year})"
 
 when isMainModule:
     var p = initOptParser()
