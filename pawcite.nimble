@@ -11,3 +11,4 @@ bin           = @["pawcite"]
 # Dependencies
 
 requires "nim >= 2.2.4"
+requires "puppy >= 2.1.2"

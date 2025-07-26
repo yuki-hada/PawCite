@@ -1,10 +1,9 @@
-import httpclient, json, strformat, strutils, parseopt
+import puppy, json, strformat, strutils, parseopt
 
 proc fetchJson*(url: string): JsonNode =
-    let client = newHttpClient()
-    let resp = client.get(url)
-    if resp.code != Http200:
-        raise newException(ValueError, &"HTTP error: {resp.status}")
+    let resp = get(url)
+    if resp.code != 200:
+        raise newException(ValueError, &"HTTP error: {resp.code}")
     return parseJson(resp.body)
 
 proc format_crossref_citation*(doi: string): string =
