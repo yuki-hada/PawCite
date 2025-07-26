@@ -34,6 +34,7 @@ proc format_crossref_citation*(doi: string): string =
             raise newException(ValueError, "No published date in dOI data")
     
     let year = $yearParts[0]
+    let family = firstAuthor["family"].getStr
     let given = firstAuthor["given"].getStr
     let initial =
         if given.len > 0:
@@ -50,7 +51,7 @@ proc format_crossref_citation*(doi: string): string =
         else:
             raise newException(ValueError, "No container data in dOI data")
 
-    result = fmt"{firstAuthor["family"].getStr} {initial}{etal}, {containerTitle}. ({year})"
+    result = fmt"{family} {initial}{etal}, {containerTitle}. ({year})"
 
 when isMainModule:
     if paramCount() == 0:
