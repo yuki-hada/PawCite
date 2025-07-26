@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -40,7 +40,7 @@ jobs:
           # 実際のバイナリ名を指定
           bin_name="pawcite"
 
-          tar czf dist/${bin_name}-${tag}-nim${nimv}-${os}.tar.gz \
+          tar czf dist/${bin_name}-${tag}-${os}.tar.gz \
               ./${bin_name}
 
       - name: Package release asset (Windows)
@@ -53,7 +53,7 @@ jobs:
           $bin = 'pawcite.exe'
 
           New-Item -ItemType Directory -Path dist | Out-Null
-          Compress-Archive -Path .\$bin -DestinationPath "dist\PowCite-$tag-nim$nimv-$os.zip"
+          Compress-Archive -Path .\$bin -DestinationPath "dist\PowCite-$tag-$os.zip"
 
 
 
