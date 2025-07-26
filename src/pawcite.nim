@@ -44,9 +44,9 @@ proc format_crossref_citation*(doi: string): string =
     let etal    = if authors.len > 1: " et al." else: ""
 
     let containerTitle = 
-        if msg.hasKey("short-container-title"):
+        if msg.hasKey("short-container-title") and msg["short-container-title"].len>0:
             msg["short-container-title"][0].getStr
-        elif msg.hasKey("container-title"):
+        elif msg.hasKey("container-title") and msg["container-title"].len>0:
             msg["container-title"][0].getStr
         else:
             raise newException(ValueError, "No container data in dOI data")
