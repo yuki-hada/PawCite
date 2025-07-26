@@ -54,7 +54,6 @@ proc format_crossref_citation*(doi: string): string =
     result = fmt"{family} {initial}{etal}, {containerTitle}. ({year})"
 
 when isMainModule:
-    when isMainModule:
     var p = initOptParser()
     while true:
         p.next()
