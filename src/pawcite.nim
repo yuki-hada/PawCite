@@ -35,7 +35,11 @@ proc format_crossref_citation*(doi: string): string =
     
     let year = $yearParts[0]
     let given = firstAuthor["given"].getStr
-    let initial = if given.len > 0: $given[0].toUpper & "." else: ""
+    let initial =
+        if given.len > 0:
+            $(toUpperAscii(given[0])) & "."
+        else:
+            ""
     let etal    = if authors.len > 1: " et al." else: ""
 
     let containerTitle = 
