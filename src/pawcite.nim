@@ -63,5 +63,5 @@ when isMainModule:
             try:
                 echo format_crossref_citation(p.key)
             except ValueError as e:
-                echo "Error for DOI ", paramStr(i), ": ", e.msg
+                echo "Error for DOI ", p.key, ": ", e.msg
         else: discard
