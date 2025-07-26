@@ -2,9 +2,8 @@ import puppy, json, strformat, strutils, parseopt
 
 proc fetchJson*(url: string): JsonNode =
     let resp = get(url)
-    if resp.code != 200:
-        raise newException(ValueError, &"HTTP error: {resp.code}")
-    return parseJson(resp.body)
+    let raw = parseJson(resp.body)
+    return raw
 
 proc format_crossref_citation*(doi: string): string =
     let data    = fetchJson("https://api.crossref.org/works/" & doi)
