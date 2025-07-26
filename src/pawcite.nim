@@ -8,7 +8,11 @@ proc fetchJson*(url: string): JsonNode =
 
 proc format_crossref_citation*(doi: string): string =
     let msg = fetchJson("https://api.crossref.org/works/" & doi)["message"]
-    let authors = msg.get("author", @[])
+    let authors =
+        if msg.hasKey("author"):
+            msg["author"].getElems
+        else:
+            @[]
     var firstAuthor: JsonNode
 
     for author in authors:
