@@ -53,6 +53,18 @@ proc format_crossref_citation*(doi: string): string =
 
     result = fmt"{family} {initial}{etal}, {containerTitle}. ({year})"
 
+proc getDOIfromDOIorURL(s: string): string =
+    if (s.startsWith("http://") or s.startsWith("https://")):
+        return extractDOIfromURL(s)
+    else:
+        return s
+
+#TODO
+#- Parse the metadata of the website indicated by the URL and retrieve the DOI information.
+#- If appropriate metadata is not found, return an error.
+proc extractDOIfromURL(url: string): string =
+    return "temp URL"
+
 when isMainModule:
     var p = initOptParser()
     while true:
@@ -61,7 +73,7 @@ when isMainModule:
         of cmdEnd: break
         of cmdArgument:
             try:
-                echo format_crossref_citation(p.key)
+                echo format_crossref_citation(getDOIfromDOIorURL(p.key))
             except ValueError as e:
                 echo "Error for DOI ", p.key, ": ", e.msg
         else: discard
